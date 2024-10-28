@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "941775062028",
+    "project_id": "dongbu-example",
+    "storage_bucket": "dongbu-example.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:941775062028:android:178040d03567f4c9209a29",
+        "android_client_info": {
+          "package_name": "com.example.dongbu_example"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBTt-tYJzQMNksXckLGsOJIGuIWxLOTkHY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

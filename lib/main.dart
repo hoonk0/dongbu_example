@@ -1,5 +1,6 @@
 
 import 'package:dongbu_example/ui/route/route_splash.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -7,14 +8,14 @@ import 'package:sizer/sizer.dart';
 
 import 'const/value/colors.dart';
 import 'const/value/text_style.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-/*  await Future.wait([
-    Firebase.initializeApp(*//*options: DefaultFirebaseOptions.currentPlatform*//*),
-    initializeDateFormatting(),
-  ]);*/
+  await Future.wait([
+    Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform),
+  ]);
 
 /*  KakaoSdk.init(
     nativeAppKey: '038ffa3bffb29bfd81e91c495d4abb41',
