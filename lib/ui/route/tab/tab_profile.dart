@@ -38,7 +38,7 @@ class TabProfile extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: const [
                           Text(
-                            '데이터를 불러오는 중...',
+                            '로그인 정보 불러오기 실패',
                             style: TS.s16w600(colorGray900),
                           ),
                         ],

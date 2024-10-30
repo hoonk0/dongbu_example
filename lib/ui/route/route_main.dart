@@ -1,11 +1,9 @@
-//
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dongbu_example/ui/route/tab/tab_book.dart';
+import 'package:dongbu_example/ui/route/tab/tab_order.dart';
 import 'package:dongbu_example/ui/route/tab/tab_profile.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../const/value/colors.dart';
 import '../../const/value/text_style.dart';
+import 'order/route_order_history_search.dart';
 
 class RouteMain extends StatefulWidget {
   const RouteMain({super.key});
@@ -15,91 +13,114 @@ class RouteMain extends StatefulWidget {
 }
 
 class _RouteMainState extends State<RouteMain> {
-  final pc = PageController();
+  final PageController pc = PageController();
   int _currentIndex = 0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  String _getAppBarTitle(int index) {
-    switch (index) {
-      case 0:
-        return '홈';
-      case 1:
-        return '프로필';
-      default:
-        return '홈';
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_getAppBarTitle(_currentIndex), style: const TS.s18w600(colorGray900)),
+        title: Text(
+          _getAppBarTitle(_currentIndex),
+          style: const TS.s18w600(colorGray900),
+        ),
         centerTitle: true,
         automaticallyImplyLeading: false,
+        actions: [
+          // 조건에 따라 검색 아이콘 추가
+          if (_currentIndex == 0) // 홈일 때만 버튼 활성화
+            IconButton(
+              icon: const Icon(Icons.search, color: Colors.black), // 검색 아이콘
+              onPressed: () {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => RouteOrderHistorySearch(),
+                  ),
+                );
+              },
+            ),
+        ],
       ),
+
       backgroundColor: colorWhite,
       body: SafeArea(
         child: PageView(
           controller: pc,
-          //physics: const NeverScrollableScrollPhysics(),
-          children: [const TabBook(), TabProfile()],
-
-          onPageChanged: (value) {
+          physics: const NeverScrollableScrollPhysics(), // 슬라이드 비활성화
+          onPageChanged: (index) {
             setState(() {
-              _currentIndex = value; // 페이지 변경 시 현재 인덱스 업데이트
+              _currentIndex = index; // 인덱스 업데이트
             });
           },
+          children: [TabOrder(), const TabProfile()],
         ),
       ),
       bottomNavigationBar: Row(
         children: List.generate(
           2,
-              (index) => Expanded(
-            child: GestureDetector(
-              onTap: () {
-                final currentPageIndex = pc.page;
-                if ((index - currentPageIndex!).abs() > 1) {
-                  pc.jumpToPage(index);
-                } else {
-                  pc.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.easeIn);
-                }
-              },
-              child: Container(
-                color: Colors.transparent,
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: AnimatedBuilder(
-                  animation: pc,
-                  builder: (context, child) {
-                    final pageIndex = pc.page ?? 0;
-                    return Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Image.asset(
-                          index == 0
-                              ? 'assets/icons/home.png'
-                              : 'assets/icons/person.png',
-                          width: 28, // 이미지 너비 (옵션)
-                          height: 28, // 이미지 높이 (옵션)
-                          fit: BoxFit.cover,
-                        ),
-                      ],
-                    );
+              (index) => _buildNavItem(index),
+        ),
+      ),
+    );
+  }
 
-                  },
+  Widget _buildNavItem(int index) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () {
+          _onNavItemTapped(index);
+        },
+        child: Container(
+          color: Colors.transparent,
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                index == 0
+                    ? 'assets/icons/home.png'
+                    : 'assets/icons/person.png',
+                width: 28,
+                height: 28,
+                fit: BoxFit.cover,
+                color: _currentIndex == index ? Colors.red : Colors.black,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                index == 0 ? '홈' : '프로필',
+                style: TextStyle(
+                  color: _currentIndex == index ? Colors.red : Colors.black,
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),
     );
   }
 
+  void _onNavItemTapped(int index) {
+    if ((index - _currentIndex).abs() > 1) {
+      pc.jumpToPage(index); // 멀리 있는 페이지는 점프
+    } else {
+      pc.animateToPage(
+        index,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeIn,
+      ); // 인접한 페이지는 애니메이션 적용
+    }
+    setState(() {
+      _currentIndex = index; // 인덱스 업데이트
+    });
+  }
 
+  String _getAppBarTitle(int index) {
+    return index == 0 ? '홈' : '프로필';
+  }
+
+  @override
+  void dispose() {
+    pc.dispose();
+    super.dispose();
+  }
 }

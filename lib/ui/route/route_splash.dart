@@ -19,13 +19,7 @@ class _RouteSplashState extends ConsumerState<RouteSplash> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(milliseconds: 2000), () {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => const RouteAuthLogin(),
-        ),
-      );
-    });
+    checkUserAndInitData();
   }
 
 
@@ -48,6 +42,7 @@ class _RouteSplashState extends ConsumerState<RouteSplash> {
           else {
             debugPrint('uid login');
             StreamMe.listenMe(ref);
+            await Future.delayed(Duration(milliseconds: 100));
             WidgetsBinding.instance.endOfFrame.then((value) async {
               Navigator.of(context).push(MaterialPageRoute(builder: (context) => const RouteMain(), settings: const RouteSettings(name: 'home')));
             });

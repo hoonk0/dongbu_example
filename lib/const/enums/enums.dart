@@ -1,7 +1,14 @@
-enum EnumBookOrder {
-  ABC,
-  Newest,
+enum OrderStatus {
+  pending,
+  approve,
+  decline,
 }
+
+enum UserGrade {
+  admin,
+  store,
+}
+
 
 enum LoginType {
   email,
