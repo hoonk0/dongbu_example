@@ -1,11 +1,10 @@
 //
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dongbu_example/ui/route/tab/tab_book.dart';
 import 'package:dongbu_example/ui/route/tab/tab_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../const/value/colors.dart';
-import '../../const/value/gaps.dart';
-import '../../const/value/keys.dart';
 import '../../const/value/text_style.dart';
 
 class RouteMain extends StatefulWidget {
@@ -17,6 +16,7 @@ class RouteMain extends StatefulWidget {
 
 class _RouteMainState extends State<RouteMain> {
   final pc = PageController();
+  int _currentIndex = 0;
 
   @override
   void initState() {
@@ -24,31 +24,43 @@ class _RouteMainState extends State<RouteMain> {
     super.initState();
   }
 
+  String _getAppBarTitle(int index) {
+    switch (index) {
+      case 0:
+        return '홈';
+      case 1:
+        return '프로필';
+      default:
+        return '홈';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colorWhite,
+        title: Text(_getAppBarTitle(_currentIndex), style: const TS.s18w600(colorGray900)),
+        centerTitle: true,
         automaticallyImplyLeading: false,
-        title: const Text(
-          'Chapter Book Quiz',
-          style: TS.s20w700(colorPurple900),
-        ),
       ),
       backgroundColor: colorWhite,
       body: SafeArea(
         child: PageView(
           controller: pc,
           //physics: const NeverScrollableScrollPhysics(),
-          children: const [TabBook(), TabProfile()],
+          children: [const TabBook(), TabProfile()],
 
-          onPageChanged: (value) {},
+          onPageChanged: (value) {
+            setState(() {
+              _currentIndex = value; // 페이지 변경 시 현재 인덱스 업데이트
+            });
+          },
         ),
       ),
       bottomNavigationBar: Row(
         children: List.generate(
-          3,
-          (index) => Expanded(
+          2,
+              (index) => Expanded(
             child: GestureDetector(
               onTap: () {
                 final currentPageIndex = pc.page;
@@ -75,21 +87,10 @@ class _RouteMainState extends State<RouteMain> {
                           width: 28, // 이미지 너비 (옵션)
                           height: 28, // 이미지 높이 (옵션)
                           fit: BoxFit.cover,
-                          color: pageIndex.toInt() == index ? colorPurple500 : colorPoint700, // 이미지 맞춤 방식 (옵션)
-                        ),
-                        Gaps.v5,
-                        Text(
-                          index == 0
-                              ? 'Book'
-                              : 'Profil',
-                          style: TextStyle(
-                            color: pageIndex.toInt() == index ? colorPurple500 : colorPoint700,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 11, // 글씨 크기 조정
-                          ),
                         ),
                       ],
                     );
+
                   },
                 ),
               ),
@@ -99,5 +100,6 @@ class _RouteMainState extends State<RouteMain> {
       ),
     );
   }
+
 
 }

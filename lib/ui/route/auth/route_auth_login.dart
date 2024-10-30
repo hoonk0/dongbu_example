@@ -5,6 +5,7 @@ import 'package:dongbu_example/ui/route/auth/route_auth_find_id.dart';
 import 'package:dongbu_example/ui/route/auth/route_auth_find_pw.dart';
 import 'package:dongbu_example/ui/route/auth/route_auth_sign_up.dart';
 import 'package:dongbu_example/ui/route/auth/route_auth_sns_sign_up.dart';
+import 'package:dongbu_example/ui/route/route_main.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -112,7 +113,7 @@ class _RouteLoginState extends State<RouteAuthLogin> {
                   Gaps.v16,
 
                   ///회원가입, 아이디, 비밀번호 찾기
-
+/*
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -168,7 +169,7 @@ class _RouteLoginState extends State<RouteAuthLogin> {
                     ],
                   ),
 
-                  SizedBox(height: 8.h),
+                  SizedBox(height: 8.h),*/
 
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -319,7 +320,13 @@ class _RouteLoginState extends State<RouteAuthLogin> {
                         )
                     ],
                   ),
+
+                  ElevatedButton(onPressed: (){
+                    Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => RouteMain()));
+                  }, child: Text('메인')),
                   Gaps.v86,
+
                 ],
               ),
             ),
